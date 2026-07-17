@@ -5880,9 +5880,9 @@ PrefabInstance:
       propertyPath: m_Name
       value: Enemy (2)
       objectReference: {fileID: 0}
-    - target: {fileID: 6710614476872894238, guid: 2c1fd1f08c2793249be53cc81358bb59, type: 3}
-      propertyPath: m_Constraints
-      value: 112
+    - target: {fileID: 698887612355794577, guid: 2c1fd1f08c2793249be53cc81358bb59, type: 3}
+      propertyPath: m_TagString
+      value: Enemy
       objectReference: {fileID: 0}
     - target: {fileID: 7717451836865398583, guid: 2c1fd1f08c2793249be53cc81358bb59, type: 3}
       propertyPath: m_LocalPosition.x
@@ -11825,9 +11825,9 @@ PrefabInstance:
       propertyPath: m_Name
       value: Enemy
       objectReference: {fileID: 0}
-    - target: {fileID: 6710614476872894238, guid: 2c1fd1f08c2793249be53cc81358bb59, type: 3}
-      propertyPath: m_Constraints
-      value: 112
+    - target: {fileID: 698887612355794577, guid: 2c1fd1f08c2793249be53cc81358bb59, type: 3}
+      propertyPath: m_TagString
+      value: Enemy
       objectReference: {fileID: 0}
     - target: {fileID: 7717451836865398583, guid: 2c1fd1f08c2793249be53cc81358bb59, type: 3}
       propertyPath: m_LocalPosition.x
@@ -26032,9 +26032,9 @@ PrefabInstance:
       propertyPath: m_Name
       value: Enemy (1)
       objectReference: {fileID: 0}
-    - target: {fileID: 6710614476872894238, guid: 2c1fd1f08c2793249be53cc81358bb59, type: 3}
-      propertyPath: m_Constraints
-      value: 112
+    - target: {fileID: 698887612355794577, guid: 2c1fd1f08c2793249be53cc81358bb59, type: 3}
+      propertyPath: m_TagString
+      value: Enemy
       objectReference: {fileID: 0}
     - target: {fileID: 7717451836865398583, guid: 2c1fd1f08c2793249be53cc81358bb59, type: 3}
       propertyPath: m_LocalPosition.x
@@ -27581,9 +27581,9 @@ PrefabInstance:
       propertyPath: m_Name
       value: Enemy (3)
       objectReference: {fileID: 0}
-    - target: {fileID: 6710614476872894238, guid: 2c1fd1f08c2793249be53cc81358bb59, type: 3}
-      propertyPath: m_Constraints
-      value: 112
+    - target: {fileID: 698887612355794577, guid: 2c1fd1f08c2793249be53cc81358bb59, type: 3}
+      propertyPath: m_TagString
+      value: Enemy
       objectReference: {fileID: 0}
     - target: {fileID: 7717451836865398583, guid: 2c1fd1f08c2793249be53cc81358bb59, type: 3}
       propertyPath: m_LocalPosition.x

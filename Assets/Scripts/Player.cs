@@ -19,12 +19,18 @@ public class Player : MonoBehaviour
     [SerializeField] float fireSpeed = 5f;
     [SerializeField] Vector3 fireOffset;
 
+    [Header("”í’eˆ—")]
+    [SerializeField] int HP = 2;
+    [SerializeField] float invincibleTimeMax = 0.5f;
+    [SerializeField] float knockbackSpeed = 5f;
+
     PlayerInput playerInput;
     Rigidbody rb;
     Animator animator;
     Vector3 rotateTarget;
 
     bool isGrounded = false;
+    float invincibleTime = 0f;
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
@@ -103,6 +109,9 @@ public class Player : MonoBehaviour
                 fireRB.linearVelocity = transform.forward * fireSpeed;
             }
         }
+
+        // –³“GŠÔ‚ğŒ¸‚ç‚·
+        if (invincibleTime > 0f) invincibleTime -= Time.deltaTime;
     }
 
     private void OnCollisionStay(Collision collision)
@@ -113,6 +122,25 @@ public class Player : MonoBehaviour
             {
                 isGrounded = true;
             }
+        }
+
+        // ”í’eˆ—
+        var attackObj = collision.gameObject.GetComponent<AttackObject>();
+        if (attackObj != null && invincibleTime <= 0)
+        {
+            HP -= attackObj.power;
+            invincibleTime = invincibleTimeMax;
+            if (HP <= 0)
+            {
+                // Destroy(gameObject);
+                Debug.Log("Game Over");
+            }
+
+            // knockback
+            var dir = transform.position - collision.transform.position;
+            dir.y = 0;
+            var knockbackVec = dir.normalized * knockbackSpeed;
+            rb.AddForce(knockbackVec, ForceMode.VelocityChange);
         }
     }
 }

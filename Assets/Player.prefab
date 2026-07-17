@@ -135,6 +135,12 @@ MonoBehaviour:
   groundNormalYMin: 0.7
   groundDamping: 10
   airDamping: 20
+  firePrefab: {fileID: 0}
+  fireSpeed: 5
+  fireOffset: {x: 0, y: 0, z: 0}
+  HP: 5
+  invincibleTimeMax: 0.5
+  knockbackSpeed: 10
 --- !u!1001 &8309019129591343707
 PrefabInstance:
   m_ObjectHideFlags: 0
