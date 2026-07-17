@@ -3,14 +3,21 @@ using UnityEngine.InputSystem;
 
 public class Player : MonoBehaviour
 {
+    [Header("基礎移動")]
     [SerializeField] float speedMax;
     [SerializeField] float accel = 15f;
     [SerializeField] float rotateSpeed = 20f;
 
+    [Header("ジャンプ関連")]
     [SerializeField] float jumpSpeed = 12f;
     [SerializeField] float groundNormalYMin = 0.7f;
     [SerializeField] float groundDamping = 8f;
     [SerializeField] float airDamping = 0.2f;
+
+    [Header("攻撃（ファイア）")]
+    [SerializeField] GameObject firePrefab;
+    [SerializeField] float fireSpeed = 5f;
+    [SerializeField] Vector3 fireOffset;
 
     PlayerInput playerInput;
     Rigidbody rb;
@@ -83,6 +90,18 @@ public class Player : MonoBehaviour
         {
             Vector3 jumpVec = new Vector3(0, jumpSpeed, 0);
             rb.AddForce(jumpVec, ForceMode.VelocityChange);
+        }
+
+       // Attack
+       if (playerInput.actions["Attack"].WasPressedThisFrame())
+        {
+            var position = transform.position + transform.TransformVector(fireOffset);
+            var fireObj = Object.Instantiate(firePrefab, position,transform.rotation);
+            var fireRB  = fireObj.GetComponent<Rigidbody>();
+            if (fireRB != null)
+            {
+                fireRB.linearVelocity = transform.forward * fireSpeed;
+            }
         }
     }
 
