@@ -1,0 +1,55 @@
+diff a/Assets/Scripts/Enemy.cs b/Assets/Scripts/Enemy.cs	(rejected hunks)
+@@ -4,8 +4,12 @@ public class Enemy : MonoBehaviour
+ {
+     [SerializeField] float moveSpeed = 3;
+     [SerializeField] float rotateSpeed = 20;
++    [SerializeField] int hp = 2;
++    [SerializeField] float invincibleTimeMax = 0.5f;
++    [SerializeField] float knockbackSpeed = 5;
+ 
+     Rigidbody rb;
++    float invincibleTime = 0;
+ 
+     public Collider playerCollider { get; set; }
+ 
+@@ -31,7 +35,7 @@ public class Enemy : MonoBehaviour
+             }
+         }
+ 
+-        if (isSeenPlayer)
++        if (isSeenPlayer && invincibleTime <= 0)
+         {
+             var subVec = playerCollider.bounds.center - rb.position;
+             subVec.y = 0;
+@@ -44,5 +48,31 @@ public class Enemy : MonoBehaviour
+             transform.forward = Vector3.Slerp(forward, rotateTarget,
+                 rotateSpeed * Time.deltaTime);
+         }
++
++        // 無敵時間を減らす
++        if(invincibleTime > 0)
++        {
++            invincibleTime -= Time.deltaTime;
++        }
++    }
++
++    private void OnCollisionStay(Collision collision)
++    {
++        var attackObj = collision.gameObject.GetComponent<AttackObject>();
++        if (attackObj != null && invincibleTime <= 0)
++        {
++            hp -= attackObj.power;
++            invincibleTime = invincibleTimeMax;
++            if (hp <= 0)
++            {
++                Destroy(gameObject);
++            }
++
++            // ノックバック
++            var dir = transform.position - collision.transform.position;
++            dir.y = 0;
++            var knockbackVec = dir.normalized * knockbackSpeed;
++            rb.linearVelocity = knockbackVec;
++        }
+     }
+ }

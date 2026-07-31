@@ -1,75 +1,69 @@
 diff a/Assets/Scripts/Player.cs b/Assets/Scripts/Player.cs	(rejected hunks)
-@@ -1,22 +1,29 @@
--using UnityEngine;
-+﻿using UnityEngine;
- using UnityEngine.InputSystem;
- 
- public class Player : MonoBehaviour
- {
-     [SerializeField] float speedMax;
-+    [SerializeField] float accel;
-+    [SerializeField] float rotateSpeed;
-+    [SerializeField] Animator animator;
-+    [SerializeField] float jumpSpeed;
+@@ -11,11 +11,18 @@ public class Player : MonoBehaviour
+     [SerializeField] float groundNormalYMin = 0.7f;
+     [SerializeField] float groundDamping = 8f;
+     [SerializeField] float airDamping = 0.5f;
++    [SerializeField] GameObject firePrefab;
++    [SerializeField] float fireSpeed;
++    [SerializeField] Vector3 fireOffset;
++    [SerializeField] int hp = 10;
++    [SerializeField] float invincibleTimeMax = 0.5f;
++    [SerializeField] float knockbackSpeed = 5;
  
      PlayerInput playerInput;
-+    Rigidbody rb;
-+    Vector3 rotateTarget;
+     Rigidbody rb;
+     Vector3 rotateTarget;
+     bool isGrounded = true;
++    float invincibleTime = 0;
  
      // Start is called once before the first execution of Update after the MonoBehaviour is created
      void Start()
-     {
-         playerInput = GetComponent<PlayerInput>();
-+        rb = GetComponent<Rigidbody>();
-     }
- 
-     // Update is called once per frame
-     void Update()
-     {
--        var moveVec = playerInput.actions["Move"].ReadValue<Vector2>();
-+        var accelVec = playerInput.actions["Move"].ReadValue<Vector2>();
- 
-         var cameraDir = playerInput.camera.transform.forward;
-         cameraDir.y = 0;
-@@ -24,9 +31,37 @@ public class Player : MonoBehaviour
- 
-         var cameraRight = playerInput.camera.transform.right;
- 
--        var moveVec3D =
--            cameraDir * moveVec.y * speedMax
--            + cameraRight * moveVec.x * speedMax;
--        transform.position = transform.position + moveVec3D * Time.deltaTime;
-+        var accelVec3D =
-+            cameraDir * accelVec.y * accel
-+            + cameraRight * accelVec.x * accel;
-+        rb.AddForce(accelVec3D, ForceMode.Acceleration);
+@@ -91,6 +98,25 @@ public class Player : MonoBehaviour
+             Vector3 jumpVec = new Vector3(0, jumpSpeed, 0);
+             rb.AddForce(jumpVec, ForceMode.VelocityChange);
+         }
 +
-+        // プレイヤーの向きを変える
-+        if(accelVec3D != Vector3.zero)
++        // 攻撃
++        if (playerInput.actions["Attack"].WasPressedThisFrame())
 +        {
-+            rotateTarget = accelVec3D.normalized;
++            var position = transform.position + transform.TransformVector(fireOffset);
++            var fireObj = Object.Instantiate(firePrefab, position, transform.rotation);
++            var fireRB = fireObj.GetComponent<Rigidbody>();
++            if (fireRB != null)
++            {
++                fireRB.linearVelocity = transform.forward * fireSpeed;
++            }
 +        }
 +
-+        // 前方向をコピーしておく
-+        Vector3 forward = transform.forward;
 +
-+        // 上方向を固定
-+        transform.up = Vector3.up;
-+
-+        // 前方向をターゲットに向かって補間
-+        transform.forward =
-+            Vector3.Slerp(forward, rotateTarget, rotateSpeed * Time.deltaTime);
-+
-+        // アニメーターのMoveSpeedパラメータに Rigidbody の移動速度の大きさを与える
-+        Vector3 velocityXZ = rb.linearVelocity;
-+        velocityXZ.y = 0;
-+        animator.SetFloat("MoveSpeed", velocityXZ.magnitude);
-+
-+        // ジャンプ
-+        if (playerInput.actions["Jump"].WasPressedThisFrame())
++        // 無敵時間を減らす
++        if (invincibleTime > 0)
 +        {
-+            Vector3 jumpVec = new Vector3(0, jumpSpeed, 0);
-+            rb.AddForce(jumpVec, ForceMode.VelocityChange);
++            invincibleTime -= Time.deltaTime;
++        }
+     }
+ 
+     private void OnCollisionStay(Collision collision)
+@@ -102,5 +128,22 @@ public class Player : MonoBehaviour
+                 isGrounded = true;
+             }
+         }
++
++        var attackObj = collision.gameObject.GetComponent<AttackObject>();
++        if (attackObj != null && invincibleTime <= 0)
++        {
++            hp -= attackObj.power;
++            invincibleTime = invincibleTimeMax;
++            if (hp <= 0)
++            {
++                Destroy(gameObject);
++            }
++
++            // ノックバック
++            var dir = transform.position - collision.transform.position;
++            dir.y = 0;
++            var knockbackVec = dir.normalized * knockbackSpeed;
++            rb.AddForce(knockbackVec, ForceMode.VelocityChange);
 +        }
      }
  }

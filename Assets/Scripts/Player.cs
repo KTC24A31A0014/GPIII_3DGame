@@ -20,7 +20,7 @@ public class Player : MonoBehaviour
     [SerializeField] Vector3 fireOffset;
 
     [Header("”í’eˆ—")]
-    [SerializeField] int HP = 2;
+    [SerializeField] public int HP = 2;
     [SerializeField] float invincibleTimeMax = 0.5f;
     [SerializeField] float knockbackSpeed = 5f;
 
@@ -126,7 +126,7 @@ public class Player : MonoBehaviour
 
         // ”í’eˆ—
         var attackObj = collision.gameObject.GetComponent<AttackObject>();
-        if (attackObj != null && invincibleTime <= 0)
+        if (attackObj != null && invincibleTime <= 0 && gameObject.CompareTag("Enemy"))
         {
             HP -= attackObj.power;
             invincibleTime = invincibleTimeMax;
@@ -135,6 +135,8 @@ public class Player : MonoBehaviour
                 // Destroy(gameObject);
                 Debug.Log("Game Over");
             }
+
+            GameManager.Instance.UpdateHPUI(HP);
 
             // knockback
             var dir = transform.position - collision.transform.position;
