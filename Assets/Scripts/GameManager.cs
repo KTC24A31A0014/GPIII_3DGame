@@ -9,6 +9,8 @@ public class GameManager : MonoBehaviour
 
     [SerializeField] private Text timerText;
     [SerializeField] private Text clearText;
+    [SerializeField] private Button restartBt;
+    [SerializeField] private Button quitBt;
     [SerializeField] private Text GameoverText;
     [SerializeField] private Text HPText;
 
@@ -19,6 +21,8 @@ public class GameManager : MonoBehaviour
     {
         Instance = this;
         clearText.gameObject.SetActive(isRunning);
+        restartBt.gameObject.SetActive(isRunning);
+        quitBt.gameObject.SetActive(isRunning);
         GameoverText.gameObject.SetActive(isRunning);
     }
 
@@ -48,15 +52,31 @@ public class GameManager : MonoBehaviour
     {
         isRunning = false;
         Time.timeScale = 0f;
-        clearText.gameObject.SetActive(!isRunning);
+        clearText?.gameObject.SetActive(!isRunning);
+        restartBt?.gameObject.SetActive(!isRunning);
+        quitBt?.gameObject.SetActive(!isRunning);
     }
 
     public void GameOver()
     {
         isRunning = false;
         Time.timeScale = 0f;
-        GameoverText.gameObject.SetActive(!isRunning);
+        GameoverText?.gameObject.SetActive(!isRunning);
         StartCoroutine(LoadScene());
+    }
+
+    public void Reset()
+    {
+        SceneManager.LoadScene("PlayScene");
+    }
+
+    public void Quit()
+    {
+#if UNITY_EDITOR
+        UnityEditor.EditorApplication.isPlaying = false;//ゲームプレイ終了
+#else
+        Application.Quit();
+#endif
     }
 
     private IEnumerator LoadScene()
