@@ -1,6 +1,7 @@
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.SceneManagement;
+using System.Collections;
 
 public class GameManager : MonoBehaviour
 {
@@ -8,6 +9,7 @@ public class GameManager : MonoBehaviour
 
     [SerializeField] private Text timerText;
     [SerializeField] private Text clearText;
+    [SerializeField] private Text GameoverText;
     [SerializeField] private Text HPText;
 
     private float _Time = 0f;
@@ -17,6 +19,7 @@ public class GameManager : MonoBehaviour
     {
         Instance = this;
         clearText.gameObject.SetActive(isRunning);
+        GameoverText.gameObject.SetActive(isRunning);
     }
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
@@ -51,6 +54,15 @@ public class GameManager : MonoBehaviour
     public void GameOver()
     {
         isRunning = false;
+        Time.timeScale = 0f;
+        GameoverText.gameObject.SetActive(!isRunning);
+        StartCoroutine(LoadScene());
+    }
+
+    private IEnumerator LoadScene()
+    {
+        yield return new WaitForSecondsRealtime(3f);
+        Time.timeScale = 1f;
         SceneManager.LoadScene("PlayScene");
     }
 

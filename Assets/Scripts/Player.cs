@@ -112,6 +112,11 @@ public class Player : MonoBehaviour
 
         // –³“GŽžŠÔ‚ðŒ¸‚ç‚·
         if (invincibleTime > 0f) invincibleTime -= Time.deltaTime;
+
+        if (HP <= 0)
+        {
+            GameManager.Instance.GameOver();
+        }
     }
 
     private void OnCollisionStay(Collision collision)
@@ -126,7 +131,7 @@ public class Player : MonoBehaviour
 
         // ”í’eˆ—
         var attackObj = collision.gameObject.GetComponent<AttackObject>();
-        if (attackObj != null && invincibleTime <= 0 && gameObject.CompareTag("Enemy"))
+        if (attackObj != null && invincibleTime <= 0 && collision.gameObject.CompareTag("Enemy"))
         {
             HP -= attackObj.power;
             invincibleTime = invincibleTimeMax;

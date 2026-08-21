@@ -6,12 +6,20 @@ public class Tower : MonoBehaviour
     [SerializeField] int towerHP = 5;
     [SerializeField] float intervalMax = 1f;
 
+    private Renderer rend;
+    private Material normalMate;
+
+    public Material HitMate;
+
     float interval = 0f;
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
         Vector3 pos = transform.position;
+
+        rend = GetComponent<Renderer>();
+        normalMate = rend.material;
     }
 
     // Update is called once per frame
@@ -25,7 +33,14 @@ public class Tower : MonoBehaviour
             Destroy(gameObject);
         }
 
-        if (interval > 0f) interval -= Time.deltaTime;
+        if (interval > 0f)
+        {
+            interval -= Time.deltaTime;
+        }
+        else if (interval <= 0f)
+        {
+            rend.material = normalMate;
+        }
     }
 
     // ”í’eˆ—
@@ -37,6 +52,8 @@ public class Tower : MonoBehaviour
             towerHP -= attackObj.power;
             interval = intervalMax;
             TowerDown(towerHP);
+            rend.material = HitMate;
+
             if ( interval <= 0 )
             {
                 Destroy(gameObject);
