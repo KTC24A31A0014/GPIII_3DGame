@@ -24,6 +24,7 @@ public class GameManager : MonoBehaviour
         restartBt.gameObject.SetActive(isRunning);
         quitBt.gameObject.SetActive(isRunning);
         GameoverText.gameObject.SetActive(isRunning);
+        //Cursor.visible = false;
     }
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
@@ -55,6 +56,7 @@ public class GameManager : MonoBehaviour
         clearText?.gameObject.SetActive(!isRunning);
         restartBt?.gameObject.SetActive(!isRunning);
         quitBt?.gameObject.SetActive(!isRunning);
+        //Cursor.visible = true;
     }
 
     public void GameOver()
@@ -63,11 +65,13 @@ public class GameManager : MonoBehaviour
         Time.timeScale = 0f;
         GameoverText?.gameObject.SetActive(!isRunning);
         StartCoroutine(LoadScene());
+        //Cursor.visible = true;
     }
 
     public void Reset()
     {
-        SceneManager.LoadScene("PlayScene");
+        Time.timeScale = 1f;
+        SceneManager.LoadScene("Kadai");
     }
 
     public void Quit()
@@ -83,7 +87,7 @@ public class GameManager : MonoBehaviour
     {
         yield return new WaitForSecondsRealtime(3f);
         Time.timeScale = 1f;
-        SceneManager.LoadScene("PlayScene");
+        SceneManager.LoadScene("Kadai");
     }
 
     private void UpdateTimerUI()
